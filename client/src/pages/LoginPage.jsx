@@ -41,7 +41,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
-      <img src="../public/chatapp(logo).png" alt="Logo" className="w-[min(30vw,250px)]" />
+      <img src="../../chatapp(logo).png" alt="Logo" className="w-[min(30vw,250px)]" />
 
       <form
         onSubmit={onSubmitHandler}

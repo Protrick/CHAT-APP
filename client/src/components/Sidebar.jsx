@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import assets from '../assets/assets';
 import menuicon from '../assets/menuicon.jpg';
-import { AuthContext } from '../../context/authContext';
-import { ChatContext } from '../../context/chatContext';
+import { AuthContext } from '../../context/authContext.jsx';
+import { ChatContext } from '../../context/chatContext.jsx';
 
 const Sidebar = () => {
   const navigate = useNavigate();

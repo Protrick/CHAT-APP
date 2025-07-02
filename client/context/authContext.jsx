@@ -9,6 +9,9 @@ export const AuthProvider = ({ children }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   axios.defaults.baseURL = backendUrl;
 
+  // ✅ Important: Enable sending cookies / credentials
+  axios.defaults.withCredentials = true;
+
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [authUser, setAuthUser] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -71,35 +74,30 @@ export const AuthProvider = ({ children }) => {
     toast.success("Logged out successfully");
   };
 
-    const updateProfile = async (userData) => {
-        try {
-            const res = await axios.put("/api/auth/update-profile", {
-                fullname: userData.fullname,
-                bio: userData.bio,
-                profilepic: userData.profilepic,  // ✅ Can be base64 string OR empty
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+  const updateProfile = async (userData) => {
+    try {
+      const res = await axios.put("/api/auth/update-profile", {
+        fullname: userData.fullname,
+        bio: userData.bio,
+        profilepic: userData.profilepic,
+      });
 
-            const data = res.data;
+      const data = res.data;
 
-            if (data.success) {
-                setAuthUser(data.user);
-                toast.success("Profile updated successfully");
-                return { success: true };
-            } else {
-                toast.error(data.message);
-                return { success: false };
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error(error.response?.data?.message || "Profile update failed");
-            return { success: false };
-        }
-    };
-  
+      if (data.success) {
+        setAuthUser(data.user);
+        toast.success("Profile updated successfully");
+        return { success: true };
+      } else {
+        toast.error(data.message);
+        return { success: false };
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Profile update failed");
+      return { success: false };
+    }
+  };
 
   const connectSocket = (userData) => {
     if (!userData || socket?.connected) return;
@@ -123,7 +121,6 @@ export const AuthProvider = ({ children }) => {
 
     setSocket(newSocket);
   };
-    
 
   return (
     <AuthContext.Provider

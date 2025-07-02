@@ -14,14 +14,19 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // ✅ CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://chat-app-frontend-5uui.onrender.com"], // ✅ Change this to your real frontend URL
+    credentials: true,
+  })
+);
 
 // ✅ Create HTTP server and attach socket.io
 const server = http.createServer(app);
 export const io = new Server(server, {
-    cors: {
-        origin: "*",  // Change to your frontend URL if needed
-    },
+  cors: {
+    origin: "https://chat-app-frontend-5uui.onrender.com",
+  },
 });
 
 // ✅ Online Users Map

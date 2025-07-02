@@ -47,7 +47,20 @@ const ChatContainer = () => {
     reader.readAsDataURL(file);
   };
 
-  return selectedUser ? (
+  if (!selectedUser) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 text-gray-500 bg-white/10 max-md:hidden h-full">
+        <img
+          src="/chatapp(logo).png"
+          alt="Logo"
+          className="w-16"
+        />
+        <p className="text-lg font-medium text-white">Chat Anytime Anywhere</p>
+      </div>
+    );
+  }
+
+  return (
     <div className="h-full overflow-hidden relative backdrop-blur-lg flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 py-3 px-4 border-b border-stone-500">
@@ -58,9 +71,9 @@ const ChatContainer = () => {
         />
         <p className="flex-1 text-lg text-white flex items-center gap-2">
           {selectedUser.fullname}
-          {onlineUsers.includes(selectedUser._id) && 
+          {onlineUsers.includes(selectedUser._id) && (
             <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          }
+          )}
         </p>
         <img
           onClick={() => setSelectedUser(null)}
@@ -68,11 +81,15 @@ const ChatContainer = () => {
           alt="Back"
           className="md:hidden w-6 cursor-pointer"
         />
-        <img src={assets.help_icon} alt="Help" className="hidden md:block w-5" />
+        <img
+          src={assets.help_icon}
+          alt="Help"
+          className="hidden md:block w-5"
+        />
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-28 max-sm:pb-36">
         {messages.map((msg, index) => {
           const isSender = msg.senderId._id === authUser._id;
           const profilePic = msg.senderId.profilepic || assets.avatar_icon;
@@ -116,7 +133,7 @@ const ChatContainer = () => {
       </div>
 
       {/* Input */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black-100/20 backdrop-blur-md flex items-center gap-3">
+      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black/20 backdrop-blur-md flex items-center gap-3 max-sm:gap-2">
         <div className="flex items-center flex-1 bg-gray-100/10 px-4 py-2 rounded-full">
           <input
             value={input}
@@ -134,7 +151,11 @@ const ChatContainer = () => {
             hidden
           />
           <label htmlFor="image">
-            <img src={assets.gallery_icon} alt="Upload" className="w-5 h-5 mr-2 cursor-pointer" />
+            <img
+              src={assets.gallery_icon}
+              alt="Upload"
+              className="w-5 h-5 mr-2 cursor-pointer"
+            />
           </label>
         </div>
         <img
@@ -144,15 +165,6 @@ const ChatContainer = () => {
           className="w-7 h-7 cursor-pointer"
         />
       </div>
-    </div>
-  ) : (
-    <div className="flex flex-col items-center justify-center gap-2 text-gray-500 bg-white/10 max-md:hidden h-full">
-      <img
-        src="https://static.vecteezy.com/system/resources/previews/018/930/583/original/wechat-logo-wechat-icon-transparent-free-png.png"
-        alt="Logo"
-        className="w-16"
-      />
-      <p className="text-lg font-medium text-white">Chat Anytime Anywhere</p>
     </div>
   );
 };

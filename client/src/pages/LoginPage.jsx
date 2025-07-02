@@ -5,147 +5,148 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
   const [currentState, setCurrentState] = useState("Sign up");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [bio, setBio] = useState("");
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
-
   const { login } = useContext(AuthContext);
 
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
-
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
     if (currentState === "Sign up" && !isDataSubmitted) {
       setIsDataSubmitted(true);
       return;
     }
-
     const payload =
       currentState === "Sign up"
         ? { fullname: fullName, email, password, bio }
         : { email, password };
-
     const isSuccess = await login(
       currentState === "Sign up" ? "signup" : "login",
       payload
     );
-
-    if (isSuccess) {
-      navigate("/");  // ✅ Redirect on success
-    }
+    if (isSuccess) navigate("/");
   };
-  
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
-      <img src="../../chatapp(logo).png" alt="Logo" className="w-[min(30vw,250px)]" />
-
-      <form
-        onSubmit={onSubmitHandler}
-        className="border-2 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg"
-      >
-        <h2 className="font-medium text-2xl flex justify-between items-center">
-          {currentState}
+    <div
+      className="min-h-screen backdrop-blur-lg bg-cover bg-center flex items-center justify-center px-10 max-sm:px-4 max-sm:py-8"
+      style={{ backgroundImage: "url('/background-blur.png')" }}
+    >
+      <div className="flex w-full max-w-5xl items-center justify-center gap-12 max-sm:flex-col max-sm:gap-6">
+        {/* Logo */}
+        <div className="flex justify-center flex-1">
           <img
-            src={assets.arrow_icon}
-            alt="Toggle"
-            className="w-5 cursor-pointer"
-            onClick={() => {
-              setCurrentState(currentState === "Sign up" ? "Login" : "Sign up");
-              setIsDataSubmitted(false);
-            }}
+            src="/chatapp(logo).png"
+            alt="Logo"
+            className="w-[150px] max-sm:w-[100px]"
           />
-        </h2>
+        </div>
 
-        {currentState === "Sign up" && !isDataSubmitted && (
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            className="p-2 border border-gray-500 rounded-md"
-          />
-        )}
-
-        {!isDataSubmitted && (
-          <>
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="p-2 border border-gray-500 rounded-md"
-            />
-
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="p-2 border border-gray-500 rounded-md"
-            />
-          </>
-        )}
-
-        {currentState === "Sign up" && isDataSubmitted && (
-          <textarea
-            placeholder="Provide a short bio..."
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            required
-            rows={4}
-            className="p-2 border border-gray-500 rounded-md"
-          />
-        )}
-
-        <button
-          type="submit"
-          className="py-3 bg-gradient-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer"
+        {/* Form */}
+        <form
+          onSubmit={onSubmitHandler}
+          className="flex-1 max-w-md border-2 bg-white/10 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg backdrop-blur-xl"
         >
-          {currentState === "Sign up" ? "Create Account" : "Login Now"}
-        </button>
+          <h2 className="font-medium text-2xl flex justify-between items-center">
+            {currentState}
+            <img
+              src={assets.arrow_icon}
+              alt="Toggle"
+              className="w-5 cursor-pointer"
+              onClick={() => {
+                setCurrentState(currentState === "Sign up" ? "Login" : "Sign up");
+                setIsDataSubmitted(false);
+              }}
+            />
+          </h2>
 
-        <div className="flex items-center gap-2 text-sm text-gray-300">
-          <input type="checkbox" required />
-          <p>Agree to the terms of use & privacy policy.</p>
-        </div>
-
-        <div className="flex flex-col gap-2 text-sm text-gray-400">
-          {currentState === "Sign up" ? (
-            <p>
-              Already have an account?{" "}
-              <span
-                onClick={() => {
-                  setCurrentState("Login");
-                  setIsDataSubmitted(false);
-                }}
-                className="font-medium text-violet-500 cursor-pointer"
-              >
-                Login here
-              </span>
-            </p>
-          ) : (
-            <p>
-              Don't have an account?{" "}
-              <span
-                onClick={() => {
-                  setCurrentState("Sign up");
-                  setIsDataSubmitted(false);
-                }}
-                className="font-medium text-violet-500 cursor-pointer"
-              >
-                Sign up here
-              </span>
-            </p>
+          {currentState === "Sign up" && !isDataSubmitted && (
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="h-[40px] w-full p-2 border border-gray-500 rounded-md bg-transparent outline-none"
+            />
           )}
-        </div>
-      </form>
+          {!isDataSubmitted && (
+            <>
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-[40px] w-full p-2 border border-gray-500 rounded-md bg-transparent outline-none"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="h-[40px] w-full p-2 border border-gray-500 rounded-md bg-transparent outline-none"
+              />
+            </>
+          )}
+          {currentState === "Sign up" && isDataSubmitted && (
+            <textarea
+              placeholder="Provide a short bio..."
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              required
+              rows={4}
+              className="p-2 border border-gray-500 rounded-md bg-transparent outline-none"
+            />
+          )}
+
+          <button
+            type="submit"
+            className="py-3 bg-gradient-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer"
+          >
+            {currentState === "Sign up" ? "Create Account" : "Login Now"}
+          </button>
+
+          <div className="flex items-center gap-2 text-sm text-gray-300">
+            <input type="checkbox" required />
+            <p>Agree to the terms of use & privacy policy.</p>
+          </div>
+
+          <div className="flex flex-col gap-2 text-sm text-gray-400">
+            {currentState === "Sign up" ? (
+              <p>
+                Already have an account?{" "}
+                <span
+                  onClick={() => {
+                    setCurrentState("Login");
+                    setIsDataSubmitted(false);
+                  }}
+                  className="font-medium text-violet-500 cursor-pointer"
+                >
+                  Login here
+                </span>
+              </p>
+            ) : (
+              <p>
+                Don't have an account?{" "}
+                <span
+                  onClick={() => {
+                    setCurrentState("Sign up");
+                    setIsDataSubmitted(false);
+                  }}
+                  className="font-medium text-violet-500 cursor-pointer"
+                >
+                  Sign up here
+                </span>
+              </p>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import  assets  from '../assets/assets';
+import React, { useContext, useEffect, useState } from 'react';
+import assets from '../assets/assets';
 import { ChatContext } from '../../context/chatContext';
 import { AuthContext } from '../../context/authContext';
 
@@ -9,7 +9,7 @@ const RightSidebar = () => {
   const [msgImages, setMsgImages] = useState([]);
 
   useEffect(() => {
-    const images = messages.filter(msg => msg.image).map(msg => msg.image);
+    const images = messages.filter((msg) => msg.image).map((msg) => msg.image);
     setMsgImages(images);
   }, [messages]);
 
@@ -19,14 +19,14 @@ const RightSidebar = () => {
 
   return (
     <div className="bg-[#8185B2]/10 text-white w-full relative overflow-y-auto max-md:hidden">
-      {/* Top User Info */}
-      <div className="pt-16 flex flex-col items-center text-center px-4 space-y-3">
+      {/* User Profile Info */}
+      <div className="pt-10 md:pt-16 flex flex-col items-center text-center px-4 space-y-3">
         {/* Profile Picture */}
         <div className="relative">
           <img
             src={selectedUser.profilepic || assets.avatar_icon}
             alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border border-white shadow-md"
+            className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border border-white shadow-md"
           />
           {isUserOnline && (
             <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
@@ -34,14 +34,12 @@ const RightSidebar = () => {
         </div>
 
         {/* Fullname */}
-        <h1 className="text-xl font-semibold">{selectedUser.fullname}</h1>
+        <h1 className="text-lg md:text-xl font-semibold">{selectedUser.fullname}</h1>
 
-        {/* Bio with overflow control */}
+        {/* Bio */}
         <div
           className="text-sm font-light text-gray-300 max-h-24 overflow-y-auto px-2 text-start break-words whitespace-pre-wrap"
-          style={{
-            wordBreak: 'break-word', // break long words
-          }}
+          style={{ wordBreak: 'break-word' }}
         >
           {selectedUser.bio}
         </div>
@@ -49,7 +47,7 @@ const RightSidebar = () => {
 
       <hr className="border-[#ffffff50] my-4" />
 
-      {/* Media Section */}
+      {/* Media Gallery */}
       <div className="px-5 text-xs">
         <p className="mb-2 text-gray-300">Media ({msgImages.length})</p>
         <div className="max-h-[200px] overflow-y-auto grid grid-cols-2 gap-3 opacity-80">

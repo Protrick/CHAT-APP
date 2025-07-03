@@ -12,6 +12,9 @@ const ChatContainer = () => {
   const scrollEnd = useRef();
   const [input, setInput] = useState("");
 
+  const HEADER_HEIGHT = 64; // px
+  const FOOTER_HEIGHT = 72; // px
+
   useEffect(() => {
     if (selectedUser) {
       getMessages(selectedUser._id);
@@ -57,9 +60,12 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="relative h-full">
+    <div className="h-screen w-full bg-black flex flex-col overflow-hidden">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 z-20 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md">
+      <div
+        className="fixed top-0 left-0 right-0 z-30 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md"
+        style={{ height: `${HEADER_HEIGHT}px` }}
+      >
         <img
           src={selectedUser.profilepic || assets.avatar_icon}
           alt="Profile"
@@ -84,8 +90,11 @@ const ChatContainer = () => {
         />
       </div>
 
-      {/* Messages */}
-      <div className="pt-16 pb-28 overflow-y-auto h-full px-4 space-y-4">
+      {/* Message Area */}
+      <div
+        className="overflow-y-auto px-4 pt-[64px] pb-[72px] space-y-4 flex-1"
+        style={{ height: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px)` }}
+      >
         {messages.map((msg, index) => {
           const isSender = msg.senderId._id === authUser._id;
           const profilePic = msg.senderId.profilepic || assets.avatar_icon;
@@ -129,7 +138,10 @@ const ChatContainer = () => {
       </div>
 
       {/* Fixed Input */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3 max-sm:gap-2">
+      <div
+        className="fixed bottom-0 left-0 right-0 z-30 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3"
+        style={{ height: `${FOOTER_HEIGHT}px` }}
+      >
         <div className="flex items-center flex-1 bg-gray-100/10 px-4 py-2 rounded-full">
           <input
             value={input}

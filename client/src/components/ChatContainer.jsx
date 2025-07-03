@@ -57,9 +57,9 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-10 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md">
+    <div className="relative h-full">
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-20 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md">
         <img
           src={selectedUser.profilepic || assets.avatar_icon}
           alt="Profile"
@@ -85,7 +85,7 @@ const ChatContainer = () => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-36">
+      <div className="pt-16 pb-28 overflow-y-auto h-full px-4 space-y-4">
         {messages.map((msg, index) => {
           const isSender = msg.senderId._id === authUser._id;
           const profilePic = msg.senderId.profilepic || assets.avatar_icon;
@@ -128,8 +128,8 @@ const ChatContainer = () => {
         <div ref={scrollEnd}></div>
       </div>
 
-      {/* Sticky Input */}
-      <div className="sticky bottom-0 z-10 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3 max-sm:gap-2">
+      {/* Fixed Input */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3 max-sm:gap-2">
         <div className="flex items-center flex-1 bg-gray-100/10 px-4 py-2 rounded-full">
           <input
             value={input}

@@ -50,19 +50,15 @@ const ChatContainer = () => {
   if (!selectedUser) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 text-gray-500 bg-white/10 max-md:hidden h-full">
-        <img
-          src="/chatapp(logo).png"
-          alt="Logo"
-          className="w-16"
-        />
+        <img src="/chatapp(logo).png" alt="Logo" className="w-16" />
         <p className="text-lg font-medium text-white">Chat Anytime Anywhere</p>
       </div>
     );
   }
 
   return (
-    <div className="h-full overflow-hidden relative backdrop-blur-lg flex flex-col">
-      {/* Header */}
+    <div className="h-full flex flex-col">
+      {/* Sticky Header */}
       <div className="sticky top-0 z-10 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md">
         <img
           src={selectedUser.profilepic || assets.avatar_icon}
@@ -89,7 +85,7 @@ const ChatContainer = () => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-28 max-sm:pb-36">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-36">
         {messages.map((msg, index) => {
           const isSender = msg.senderId._id === authUser._id;
           const profilePic = msg.senderId.profilepic || assets.avatar_icon;
@@ -132,8 +128,8 @@ const ChatContainer = () => {
         <div ref={scrollEnd}></div>
       </div>
 
-      {/* Input */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black/20 backdrop-blur-md flex items-center gap-3 max-sm:gap-2">
+      {/* Sticky Input */}
+      <div className="sticky bottom-0 z-10 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3 max-sm:gap-2">
         <div className="flex items-center flex-1 bg-gray-100/10 px-4 py-2 rounded-full">
           <input
             value={input}

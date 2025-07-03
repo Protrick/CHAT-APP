@@ -63,7 +63,7 @@ const ChatContainer = () => {
   return (
     <div className="h-full overflow-hidden relative backdrop-blur-lg flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-3 py-3 px-4 border-b border-stone-500">
+      <div className="sticky top-0 z-10 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md">
         <img
           src={selectedUser.profilepic || assets.avatar_icon}
           alt="Profile"

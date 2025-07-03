@@ -33,7 +33,6 @@ const LoginPage = () => {
   return (
     <div
       className="min-h-screen backdrop-blur-lg bg-cover bg-center flex items-center justify-center px-10 max-sm:px-4 max-sm:py-8"
-      style={{ backgroundImage: "url('/background-blur.png')" }}
     >
       <div className="flex w-full max-w-5xl items-center justify-center gap-12 max-sm:flex-col max-sm:gap-6">
         {/* Logo */}

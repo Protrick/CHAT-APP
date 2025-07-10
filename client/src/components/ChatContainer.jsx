@@ -6,14 +6,12 @@ import { AuthContext } from "../../context/authContext";
 import toast from "react-hot-toast";
 
 const ChatContainer = () => {
-  const { messages, selectedUser, setSelectedUser, sendMessage, getMessages } = useContext(ChatContext);
+  const { messages, selectedUser, setSelectedUser, sendMessage, getMessages } =
+    useContext(ChatContext);
   const { authUser, onlineUsers } = useContext(AuthContext);
 
   const scrollEnd = useRef();
   const [input, setInput] = useState("");
-
-  const HEADER_HEIGHT = 64; // px
-  const FOOTER_HEIGHT = 72; // px
 
   useEffect(() => {
     if (selectedUser) {
@@ -60,118 +58,99 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="h-screen w-full bg-black flex flex-col overflow-hidden">
-      {/* Fixed Header */}
-      <div
-        className="fixed top-0 left-0 right-0 z-30 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md"
-        style={{ height: `${HEADER_HEIGHT}px` }}
-      >
-        <img
-          src={selectedUser.profilepic || assets.avatar_icon}
-          alt="Profile"
-          className="w-8 h-8 rounded-full"
-        />
-        <p className="flex-1 text-lg text-white flex items-center gap-2">
-          {selectedUser.fullname}
-          {onlineUsers.includes(selectedUser._id) && (
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          )}
-        </p>
-        <img
-          onClick={() => setSelectedUser(null)}
-          src={assets.arrow_icon}
-          alt="Back"
-          className="md:hidden w-6 cursor-pointer"
-        />
-        <img
-          src={assets.help_icon}
-          alt="Help"
-          className="hidden md:block w-5"
-        />
-      </div>
+    <div className="h-screen w-full bg-black flex justify-center overflow-hidden">
+      <div className="w-full max-w-screen-md flex flex-col">
+        {/* Header */}
+        <div className="z-30 flex items-center gap-3 py-3 px-4 border-b border-stone-500 bg-black/30 backdrop-blur-md">
+          <img
+            src={selectedUser.profilepic || assets.avatar_icon}
+            alt="Profile"
+            className="w-8 h-8 rounded-full"
+          />
+          <p className="flex-1 text-lg text-white flex items-center gap-2">
+            {selectedUser.fullname}
+            {onlineUsers.includes(selectedUser._id) && (
+              <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            )}
+          </p>
+          <img
+            onClick={() => setSelectedUser(null)}
+            src={assets.arrow_icon}
+            alt="Back"
+            className="md:hidden w-6 cursor-pointer"
+          />
+          <img src={assets.help_icon} alt="Help" className="hidden md:block w-5" />
+        </div>
 
-      {/* Message Area */}
-      <div
-        className="overflow-y-auto px-4 pt-[64px] pb-[72px] space-y-4 flex-1"
-        style={{ height: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px)` }}
-      >
-        {messages.map((msg, index) => {
-          const isSender = msg.senderId._id === authUser._id;
-          const profilePic = msg.senderId.profilepic || assets.avatar_icon;
+        {/* Messages */}
+        <div className="overflow-y-auto px-4 py-4 space-y-4 flex-1">
+          {messages.map((msg, index) => {
+            const isSender = msg.senderId._id === authUser._id;
+            const profilePic = msg.senderId.profilepic || assets.avatar_icon;
 
-          return (
-            <div
-              key={index}
-              className={`flex ${isSender ? "flex-row-reverse" : "flex-row"} items-end gap-2`}
-            >
-              {/* Avatar */}
-              <div className="flex flex-col items-center text-xs text-gray-400">
-                <img
-                  src={profilePic}
-                  alt="Avatar"
-                  className="w-7 h-7 rounded-full"
-                />
-                <p className="text-[10px]">{formatMessageTime(msg.createdAt)}</p>
-              </div>
+            return (
+              <div
+                key={index}
+                className={`flex ${isSender ? "flex-row-reverse" : "flex-row"} items-end gap-2`}
+              >
+                {/* Avatar */}
+                <div className="flex flex-col items-center text-xs text-gray-400">
+                  <img src={profilePic} alt="Avatar" className="w-7 h-7 rounded-full" />
+                  <p className="text-[10px]">{formatMessageTime(msg.createdAt)}</p>
+                </div>
 
-              {/* Message Bubble */}
-              {msg.image ? (
-                <img
-                  src={msg.image}
-                  alt="Sent"
-                  className="max-w-[230px] border border-gray-700 rounded-lg"
-                />
-              ) : (
-                <p
-                  className={`p-2 md:text-sm text-sm font-light rounded-lg max-w-[230px] text-white break-words ${isSender
+                {/* Message Bubble */}
+                {msg.image ? (
+                  <img
+                    src={msg.image}
+                    alt="Sent"
+                    className="max-w-[75%] border border-gray-700 rounded-lg"
+                  />
+                ) : (
+                  <p
+                    className={`p-2 text-sm font-light rounded-lg max-w-[75%] text-white break-words ${isSender
                       ? "bg-violet-500/30 rounded-br-none"
                       : "bg-gray-700/50 rounded-bl-none"
-                    }`}
-                >
-                  {msg.text}
-                </p>
-              )}
-            </div>
-          );
-        })}
-        <div ref={scrollEnd}></div>
-      </div>
-
-      {/* Fixed Input */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-30 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3"
-        style={{ height: `${FOOTER_HEIGHT}px` }}
-      >
-        <div className="flex items-center flex-1 bg-gray-100/10 px-4 py-2 rounded-full">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSendMessage(e)}
-            type="text"
-            placeholder="Send a message..."
-            className="flex-1 text-sm bg-transparent outline-none text-white placeholder-gray-400"
-          />
-          <input
-            onChange={handleSendImage}
-            type="file"
-            id="image"
-            accept="image/png, image/jpeg"
-            hidden
-          />
-          <label htmlFor="image">
-            <img
-              src={assets.gallery_icon}
-              alt="Upload"
-              className="w-5 h-5 mr-2 cursor-pointer"
-            />
-          </label>
+                      }`}
+                  >
+                    {msg.text}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+          <div ref={scrollEnd}></div>
         </div>
-        <img
-          onClick={handleSendMessage}
-          src={assets.send_button}
-          alt="Send"
-          className="w-7 h-7 cursor-pointer"
-        />
+
+        {/* Input */}
+        <div className="z-30 p-3 bg-black/30 backdrop-blur-md flex items-center gap-3">
+          <div className="flex items-center flex-1 bg-gray-100/10 px-4 py-2 rounded-full">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage(e)}
+              type="text"
+              placeholder="Send a message..."
+              className="flex-1 text-sm bg-transparent outline-none text-white placeholder-gray-400"
+            />
+            <input
+              onChange={handleSendImage}
+              type="file"
+              id="image"
+              accept="image/png, image/jpeg"
+              hidden
+            />
+            <label htmlFor="image">
+              <img src={assets.gallery_icon} alt="Upload" className="w-5 h-5 mr-2 cursor-pointer" />
+            </label>
+          </div>
+          <img
+            onClick={handleSendMessage}
+            src={assets.send_button}
+            alt="Send"
+            className="w-7 h-7 cursor-pointer"
+          />
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,10 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 // ✅ CORS
 app.use(
   cors({
-    origin: ["https://chat-app-frontend-5uui.onrender.com"], // ✅ Change this to your real frontend domain
+    origin: [
+      "https://chat-app-frontend-5uui.onrender.com",
+      "http://localhost:5173"
+    ], // ✅ Change this to your real frontend domain
     credentials: true,
   })
 );
@@ -25,7 +28,10 @@ app.use(
 const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
-    origin: "https://chat-app-frontend-5uui.onrender.com", // ✅ Frontend URL
+    origin: [
+      "https://chat-app-frontend-5uui.onrender.com",
+      "http://localhost:5173",
+    ],
     credentials: true,
   },
 });

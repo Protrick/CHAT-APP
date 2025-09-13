@@ -1,79 +1,89 @@
 import React, { useContext, useEffect, useState } from 'react';
-import assets from '../assets/assets';
-import { ChatContext } from '../../context/chatContext';
 import { AuthContext } from '../../context/authContext';
+import { ChatContext } from '../../context/chatContext';
+import assets from '../assets/assets';
+import { useNavigate } from 'react-router-dom';
 
 const RightSidebar = () => {
   const { selectedUser, messages } = useContext(ChatContext);
-  const { logout, onlineUsers } = useContext(AuthContext);
+  const { authUser, onlineUsers } = useContext(AuthContext);
   const [msgImages, setMsgImages] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const images = messages.filter((msg) => msg.image).map((msg) => msg.image);
-    setMsgImages(images);
+    if (messages) {
+      const images = messages.filter((msg) => msg.image).map((msg) => msg.image);
+      setMsgImages(images);
+    }
   }, [messages]);
 
   if (!selectedUser) return null;
-
+  
   const isUserOnline = onlineUsers.includes(selectedUser._id);
+  // Fix: Convert both IDs to strings before comparing
+  const isOwnProfile = String(authUser._id) === String(selectedUser._id);
+  
+  // Handle profile edit navigation
+  const handleEditProfile = () => {
+    if (isOwnProfile) {
+      navigate('/profile');
+    }
+  };
 
   return (
-    <div className="bg-[#8185B2]/10 text-white w-full relative overflow-y-auto max-md:hidden">
-      {/* User Profile Info */}
-      <div className="pt-10 md:pt-16 flex flex-col items-center text-center px-4 space-y-3">
-        {/* Profile Picture */}
-        <div className="relative">
+    <div className="bg-black/20 h-full flex flex-col border-l border-gray-700">
+      {/* Profile Info */}
+      <div className="flex flex-col items-center text-center p-4 border-b border-gray-700">
+        <div className="relative mb-2">
           <img
             src={selectedUser.profilepic || assets.avatar_icon}
             alt="Profile"
-            className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border border-white shadow-md"
+            className={`w-20 h-20 rounded-full ${isOwnProfile ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+            onClick={handleEditProfile}
+            title={isOwnProfile ? "Click to edit profile" : ""}
           />
           {isUserOnline && (
-            <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+            <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-gray-800 rounded-full"></span>
           )}
         </div>
-
-        {/* Fullname */}
-        <h1 className="text-lg md:text-xl font-semibold">{selectedUser.fullname}</h1>
-
-        {/* Bio */}
-        <div
-          className="text-sm font-light text-gray-300 max-h-24 overflow-y-auto px-2 text-start break-words whitespace-pre-wrap"
-          style={{ wordBreak: 'break-word' }}
+        <p 
+          className={`font-semibold text-lg text-white ${isOwnProfile ? 'cursor-pointer hover:text-violet-300 transition-colors' : ''}`}
+          onClick={handleEditProfile}
+          title={isOwnProfile ? "Click to edit profile" : ""}
         >
-          {selectedUser.bio}
-        </div>
+          {selectedUser.fullname}
+        </p>
+        <p className="text-sm text-gray-400 mb-3">{selectedUser.bio}</p>
+        
+        {/* Edit Profile Button - Only visible for own profile */}
+        {isOwnProfile && (
+          <button 
+            className="px-4 py-1.5 bg-violet-500/30 hover:bg-violet-500/50 text-white rounded-full text-sm transition-colors"
+            onClick={handleEditProfile}
+          >
+            Edit Profile
+          </button>
+        )}
       </div>
 
-      <hr className="border-[#ffffff50] my-4" />
-
-      {/* Media Gallery */}
-      <div className="px-5 text-xs">
-        <p className="mb-2 text-gray-300">Media ({msgImages.length})</p>
-        <div className="max-h-[200px] overflow-y-auto grid grid-cols-2 gap-3 opacity-80">
-          {msgImages.length > 0 ? (
-            msgImages.map((url, index) => (
-              <div
+      {/* Shared Files */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <h3 className="text-white font-semibold mb-2">Shared Files</h3>
+        {msgImages.length > 0 ? (
+          <div className="grid grid-cols-3 gap-2">
+            {msgImages.map((img, index) => (
+              <img
                 key={index}
-                onClick={() => window.open(url)}
-                className="cursor-pointer rounded overflow-hidden"
-              >
-                <img src={url} alt="media" className="w-full h-full rounded-md object-cover" />
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-400 col-span-2 text-center">No Media</p>
-          )}
-        </div>
+                src={img}
+                alt="Shared"
+                className="w-full h-20 object-cover rounded-md"
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-400 text-sm text-center">No shared files</p>
+        )}
       </div>
-
-      {/* Logout Button */}
-      <button
-        onClick={logout}
-        className="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-violet-700 text-white text-sm font-light py-2 px-8 rounded-full cursor-pointer hover:opacity-90 transition"
-      >
-        Logout
-      </button>
     </div>
   );
 };

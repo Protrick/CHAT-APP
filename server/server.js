@@ -18,7 +18,8 @@ app.use(
   cors({
     origin: [
       "https://chat-app-frontend-5uui.onrender.com",
-      "http://localhost:5173"
+      "http://localhost:5173",
+      "https://4ghbzg27-5173.inc1.devtunnels.ms/",
     ], // ✅ Change this to your real frontend domain
     credentials: true,
   })
@@ -31,13 +32,14 @@ export const io = new Server(server, {
     origin: [
       "https://chat-app-frontend-5uui.onrender.com",
       "http://localhost:5173",
+      "https://4ghbzg27-5173.inc1.devtunnels.ms/",
     ],
     credentials: true,
   },
 });
 
 // ✅ Online Users Map
-export const userSocketMap = {}; // { userId: socketId }
+export const userSocketMap = {}; 
 
 // ✅ Socket.io Connection
 io.on("connection", (socket) => {

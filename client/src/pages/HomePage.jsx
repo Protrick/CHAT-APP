@@ -8,11 +8,24 @@ const HomePage = () => {
   const { selectedUser } = useContext(ChatContext);
 
   return (
-    <div className="border w-full h-screen sm:px-[5%] sm:py-[2%]">
-      <div className={`backdrop-blur-xl border-2 border-gray-600 rounded-2xl overflow-hidden h-full grid grid-cols-1 relative ${selectedUser ? 'md:grid-cols-[1fr_1.5fr_1fr] xl:grid-cols-[1fr_2fr_1fr]' : 'md:grid-cols-2'}`}>
-        <Sidebar />
+    <div className="w-full h-screen bg-transparent sm:p-4 md:p-8">
+      <div className={`backdrop-blur-xl border-2 border-gray-700 rounded-2xl overflow-hidden h-full w-full grid ${
+        selectedUser ? 'md:grid-cols-[280px_1fr_280px]' : 'md:grid-cols-[280px_1fr]'
+      }`}>
+        {/* Sidebar - Fixed width */}
+        <div className={`${selectedUser ? 'max-md:hidden' : ''}`}>
+          <Sidebar />
+        </div>
+        
+        {/* Chat Container - Flexible width */}
         <ChatContainer />
-        <RightSidebar />
+        
+        {/* Right Sidebar - Only shown when user is selected */}
+        {selectedUser && (
+          <div className="max-md:hidden">
+            <RightSidebar />
+          </div>
+        )}
       </div>
     </div>
   );
